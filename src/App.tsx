@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import MemoryCanvas from './components/MemoryCanvas';
 import MemoryControls from './components/MemoryControls';
-import MemoryArchive from './components/MemoryArchive';
 import { useGhostLayers } from './hooks/useGhostLayers';
 import './App.css';
 
@@ -47,6 +46,34 @@ function App() {
     addGhostLayer(grid, mood, note);
   };
 
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    return `${month}.${day}.${year}`;
+  };
+
+  const colors: Record<string, string> = {
+    luminous: '#FFD700',
+    tender: '#FFB6C1',
+    fleeting: '#E6E6FA',
+    golden: '#DAA520',
+    serene: '#87CEEB',
+    melancholy: '#9370DB',
+    nostalgic: '#CD5C5C',
+    whimsical: '#FF1493',
+    hushed: '#696969',
+    brilliant: '#FFD700',
+    mellow: '#D2691E',
+    tranquil: '#4169E1',
+    delicate: '#C71585',
+    boundless: '#1E90FF',
+    painful: '#8B0000',
+  };
+
+  const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);
+
   return (
     <div className="app">
       <MemoryCanvas
@@ -61,12 +88,32 @@ function App() {
         onJournalSubmit={handleJournalSubmit}
         onJournalSkip={handleJournalSkip}
       />
-      <button className="archive-toggle" onClick={() => setShowArchive(true)}>
-        vault
-      </button>
-      {showArchive && (
-        <MemoryArchive memories={memories} onClose={() => setShowArchive(false)} />
-      )}
+      <div className="vault-container">
+        <button className="archive-toggle" onClick={() => {
+          console.log('Vault clicked, memories:', memories.length);
+          setShowArchive(!showArchive);
+        }}>
+          vault
+        </button>
+        {showArchive && sortedMemories.length > 0 && (
+          <div className="vault-list">
+            {sortedMemories.map((memory) => (
+              <div key={memory.id} className="vault-item">
+                <div
+                  className="vault-mood"
+                  style={{ color: colors[memory.mood] || '#bbb' }}
+                >
+                  {memory.mood}
+                </div>
+                <div className="vault-date">{formatDate(memory.timestamp)}</div>
+                {memory.note && (
+                  <div className="vault-note">"{memory.note}"</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

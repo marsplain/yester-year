@@ -43,6 +43,10 @@ const JournalPrompt = ({ mood, onSubmit, onSkip }: JournalPromptProps) => {
           onKeyDown={handleKeyDown}
           placeholder=""
           maxLength={100}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
         />
       </form>
     </div>
