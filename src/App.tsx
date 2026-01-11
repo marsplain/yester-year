@@ -67,31 +67,21 @@ function App() {
   };
 
   const colors: Record<string, string> = {
-    luminous: '#FFD700',
-    tender: '#FFB6C1',
-    fleeting: '#E6E6FA',
-    golden: '#DAA520',
-    serene: '#87CEEB',
-    wistful: '#B0C4DE',
-    ethereal: '#F0E68C',
-    gentle: '#98FB98',
-    radiant: '#FFA07A',
-    quiet: '#D3D3D3',
-    vivid: '#FF6347',
-    soft: '#FFDAB9',
-    dreamy: '#DDA0DD',
-    warm: '#FF7F50',
-    melancholy: '#9370DB',
-    peaceful: '#AFEEEE',
-    nostalgic: '#CD5C5C',
-    whimsical: '#FF1493',
-    hushed: '#696969',
-    brilliant: '#FFD700',
-    mellow: '#D2691E',
-    tranquil: '#4169E1',
-    delicate: '#C71585',
-    boundless: '#1E90FF',
-    painful: '#8B0000',
+    effervescent: '#FFD700',      // bright gold
+    joyful: '#FFA500',            // warm orange
+    warm: '#FF6347',              // tomato red
+    golden: '#DAA520',            // goldenrod
+    tender: '#FFB6C1',            // light pink
+    soft: '#98D8C8',              // seafoam green
+    dreamy: '#DDA0DD',            // plum
+    quiet: '#6B9AC4',             // soft blue
+    nostalgic: '#CD5C5C',         // indian red
+    restless: '#5F9EA0',          // cadet blue
+    aching: '#C44569',            // deep rose red
+    heavy: '#696969',             // dim gray
+    melancholic: '#1E4D7B',       // cobalt blue
+    hollow: '#5A7D9A',            // steel blue
+    raw: '#8B0000',               // dark red
   };
 
   const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);

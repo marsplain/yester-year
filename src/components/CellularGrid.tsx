@@ -25,31 +25,21 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
 
   // Deep, rich retro colors - no pastels
   const colors: Record<string, string> = {
-    luminous: '#FFD700',
-    tender: '#D63384',
-    fleeting: '#8B7355',
-    golden: '#DAA520',
-    serene: '#4682B4',
-    wistful: '#9370DB',
-    ethereal: '#BA55D3',
-    gentle: '#3CB371',
-    radiant: '#FF8C00',
-    quiet: '#5F9EA0',
-    vivid: '#DC143C',
-    soft: '#CD853F',
-    dreamy: '#9932CC',
-    warm: '#FF6347',
-    melancholy: '#483D8B',
-    peaceful: '#228B22',
-    nostalgic: '#CD5C5C',
-    whimsical: '#FF1493',
-    hushed: '#696969',
-    brilliant: '#FFD700',
-    mellow: '#D2691E',
-    tranquil: '#4169E1',
-    delicate: '#C71585',
-    boundless: '#1E90FF',
-    painful: '#8B0000',
+    effervescent: '#FFD700',      // bright gold
+    joyful: '#FFA500',            // warm orange
+    warm: '#DC143C',              // crimson red
+    golden: '#DAA520',            // goldenrod
+    tender: '#D63384',            // deep pink
+    soft: '#3CB371',              // medium sea green
+    dreamy: '#9932CC',            // dark orchid
+    quiet: '#4682B4',             // steel blue
+    nostalgic: '#CD5C5C',         // indian red
+    restless: '#5F9EA0',          // cadet blue
+    aching: '#C44569',            // deep rose red
+    heavy: '#696969',             // dim gray
+    melancholic: '#0047AB',       // cobalt blue
+    hollow: '#4169E1',            // royal blue
+    raw: '#8B0000',               // dark red
   };
 
   // Seed the grid when mood changes
