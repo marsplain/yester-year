@@ -21,3 +21,25 @@
   letter-spacing: 1px;
   text-transform: lowercase;
 }
+
+.archive-toggle {
+  position: fixed;
+  left: 40px;
+  top: 40px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 300;
+  color: #bbb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+  padding: 8px 0;
+  z-index: 100;
+}
+
+.archive-toggle:hover {
+  color: #666;
+  letter-spacing: 0.5px;
+}

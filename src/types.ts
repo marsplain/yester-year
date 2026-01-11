@@ -9,6 +9,17 @@ export interface Memory {
     x: number;
     y: number;
   };
+  note?: string; // Optional journal entry
+  gridSnapshot?: string[][]; // Snapshot of the pattern at fossilization
+}
+
+export interface GhostLayer {
+  id: string;
+  mood: string;
+  timestamp: number;
+  grid: string[][]; // The fossilized pattern
+  opacity: number; // Fades over time
+  note?: string;
 }
 
 export type Mood = 'happy' | 'calm' | 'excited' | 'melancholy' | 'peaceful';

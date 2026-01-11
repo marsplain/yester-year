@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import JournalPrompt from './JournalPrompt';
 import './MemoryControls.css';
 
 interface MemoryControlsProps {
@@ -8,9 +9,12 @@ interface MemoryControlsProps {
     weather: string;
     activity: string;
   }) => void;
+  selectedMood: string | null;
+  onJournalSubmit: (note: string) => void;
+  onJournalSkip: () => void;
 }
 
-const MemoryControls = ({ onCreateMemory }: MemoryControlsProps) => {
+const MemoryControls = ({ onCreateMemory, selectedMood, onJournalSubmit, onJournalSkip }: MemoryControlsProps) => {
   const [selectedWord, setSelectedWord] = useState('');
 
   const words = [
@@ -38,31 +42,40 @@ const MemoryControls = ({ onCreateMemory }: MemoryControlsProps) => {
     'tranquil',
     'delicate',
     'boundless',
+    'painful',
   ];
 
   const handleWordClick = (word: string) => {
     setSelectedWord(word);
-    // Auto-submit when word is clicked
+    // Trigger mood selection (will show journal prompt)
     onCreateMemory({
       mood: word,
       season: 'spring',
       weather: 'sunny',
       activity: 'rest',
     });
-    // Brief delay before clearing selection for visual feedback
+    // Brief delay before clearing visual selection
     setTimeout(() => setSelectedWord(''), 300);
   };
 
   return (
     <div className="memory-controls">
       {words.map((word) => (
-        <button
-          key={word}
-          className={`word-button ${selectedWord === word ? 'selected' : ''}`}
-          onClick={() => handleWordClick(word)}
-        >
-          {word}
-        </button>
+        <div key={word}>
+          <button
+            className={`word-button ${selectedWord === word ? 'selected' : ''}`}
+            onClick={() => handleWordClick(word)}
+          >
+            {word}
+          </button>
+          {selectedMood === word && (
+            <JournalPrompt
+              mood={selectedMood}
+              onSubmit={onJournalSubmit}
+              onSkip={onJournalSkip}
+            />
+          )}
+        </div>
       ))}
     </div>
   );

@@ -1,19 +1,23 @@
-import type { Memory } from '../types';
-import Character from './Character';
-import PoolScene from './PoolScene';
+import CellularGrid from './CellularGrid';
+import type { GhostLayer } from '../types';
 import './MemoryCanvas.css';
 
 interface MemoryCanvasProps {
-  memories: Memory[];
+  currentMood: string | null;
+  onSeed: () => void;
+  ghostLayers: GhostLayer[];
+  onFossilize: (grid: string[][], mood: string) => void;
 }
 
-const MemoryCanvas = ({ memories }: MemoryCanvasProps) => {
+const MemoryCanvas = ({ currentMood, onSeed, ghostLayers, onFossilize }: MemoryCanvasProps) => {
   return (
     <div className="memory-canvas">
-      <PoolScene />
-      {memories.map((memory) => (
-        <Character key={memory.id} memory={memory} />
-      ))}
+      <CellularGrid
+        mood={currentMood}
+        onSeed={onSeed}
+        ghostLayers={ghostLayers}
+        onFossilize={onFossilize}
+      />
     </div>
   );
 };
