@@ -42,7 +42,7 @@ const JournalPrompt = ({ mood, onSubmit, onSkip }: JournalPromptProps) => {
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder=""
-          maxLength={100}
+          maxLength={26}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
