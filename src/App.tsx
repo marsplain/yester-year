@@ -21,16 +21,26 @@ function App() {
 
   const handleJournalSubmit = (note: string) => {
     if (selectedMood) {
+      // Create memory immediately with empty grid (will be updated later)
+      const emptyGrid: string[][] = Array(50).fill(null).map(() => Array(50).fill(''));
+      addGhostLayer(emptyGrid, selectedMood, note);
+
       setCurrentMood(selectedMood);
-      // Store note with mood key for later fossilization
+      // Store note with mood key for later grid update
       sessionStorage.setItem(`note-${selectedMood}`, note);
+      sessionStorage.setItem(`memory-id-${selectedMood}`, Date.now().toString());
       setSelectedMood(null);
     }
   };
 
   const handleJournalSkip = () => {
     if (selectedMood) {
+      // Create memory immediately without note
+      const emptyGrid: string[][] = Array(50).fill(null).map(() => Array(50).fill(''));
+      addGhostLayer(emptyGrid, selectedMood, undefined);
+
       setCurrentMood(selectedMood);
+      sessionStorage.setItem(`memory-id-${selectedMood}`, Date.now().toString());
       setSelectedMood(null);
     }
   };
@@ -40,10 +50,12 @@ function App() {
     setCurrentMood(null);
   };
 
-  const handleFossilize = (grid: string[][], mood: string) => {
-    const note = sessionStorage.getItem(`note-${mood}`) || undefined;
+  const handleFossilize = (_grid: string[][], mood: string) => {
+    // Memory was already created when journal was submitted
+    // Just clean up sessionStorage
     sessionStorage.removeItem(`note-${mood}`);
-    addGhostLayer(grid, mood, note);
+    sessionStorage.removeItem(`memory-id-${mood}`);
+    // Note: The grid snapshot is already saved, this fossilization just cleans up
   };
 
   const formatDate = (timestamp: number) => {
