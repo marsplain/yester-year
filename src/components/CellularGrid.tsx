@@ -22,24 +22,26 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
   );
   const [currentMood, setCurrentMood] = useState<string | null>(null);
   const [birthTime, setBirthTime] = useState<number | null>(null);
+  const [hoveredMood, setHoveredMood] = useState<string | null>(null);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
-  // Deep, rich retro colors - no pastels
+  // Vibrant color spectrum: warm/happy → cool/sad
   const colors: Record<string, string> = {
-    effervescent: '#FFD700',      // bright gold
-    joyful: '#FFA500',            // warm orange
-    warm: '#DC143C',              // crimson red
-    golden: '#DAA520',            // goldenrod
-    tender: '#D63384',            // deep pink
-    soft: '#3CB371',              // medium sea green
-    dreamy: '#9932CC',            // dark orchid
-    quiet: '#4682B4',             // steel blue
-    nostalgic: '#CD5C5C',         // indian red
-    restless: '#5F9EA0',          // cadet blue
-    aching: '#C44569',            // deep rose red
-    heavy: '#696969',             // dim gray
-    melancholic: '#0047AB',       // cobalt blue
-    hollow: '#4169E1',            // royal blue
-    raw: '#8B0000',               // dark red
+    effervescent: '#FFFF00',      // pure bright yellow
+    joyful: '#FFD700',            // golden yellow
+    warm: '#FF8C00',              // dark orange
+    golden: '#FFA500',            // pure orange
+    tender: '#FF1493',            // deep pink
+    soft: '#FF69B4',              // hot pink
+    dreamy: '#DA70D6',            // orchid
+    quiet: '#BA55D3',             // medium orchid
+    nostalgic: '#9370DB',         // medium purple
+    restless: '#8A2BE2',          // blue violet
+    aching: '#4169E1',            // royal blue
+    heavy: '#1E90FF',             // dodger blue
+    melancholic: '#00BFFF',       // deep sky blue
+    hollow: '#00CED1',            // dark turquoise
+    raw: '#20B2AA',               // light sea green
   };
 
   // Seed the grid when mood changes
@@ -205,6 +207,42 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
     }
   }, [grid, ghostLayers, colors]);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / CELL_SIZE);
+    const y = Math.floor((e.clientY - rect.top) / CELL_SIZE);
+
+    if (x >= 0 && x < COLS && y >= 0 && y < ROWS) {
+      const cellMood = grid[y][x];
+      if (cellMood) {
+        setHoveredMood(cellMood);
+        setTooltipPos({ x: e.clientX, y: e.clientY });
+        return;
+      }
+
+      // Check ghost layers
+      for (let i = ghostLayers.length - 1; i >= 0; i--) {
+        const ghostMood = ghostLayers[i].grid[y]?.[x];
+        if (ghostMood) {
+          setHoveredMood(ghostMood);
+          setTooltipPos({ x: e.clientX, y: e.clientY });
+          return;
+        }
+      }
+    }
+
+    setHoveredMood(null);
+    setTooltipPos(null);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredMood(null);
+    setTooltipPos(null);
+  };
+
   return (
     <div className="cellular-grid">
       <canvas
@@ -212,7 +250,20 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
         width={COLS * CELL_SIZE}
         height={ROWS * CELL_SIZE}
         className="grid-canvas"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       />
+      {hoveredMood && tooltipPos && (
+        <div
+          className="cell-tooltip"
+          style={{
+            left: tooltipPos.x + 10,
+            top: tooltipPos.y + 10,
+          }}
+        >
+          {hoveredMood}
+        </div>
+      )}
     </div>
   );
 };

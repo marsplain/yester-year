@@ -8,6 +8,10 @@ function App() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [currentMood, setCurrentMood] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [userYear, setUserYear] = useState('');
+  const [showNameInput, setShowNameInput] = useState(true);
+  const [showYearInput, setShowYearInput] = useState(false);
   const { ghostLayers, memories, addGhostLayer } = useGhostLayers();
 
   const handleWordClick = (selection: {
@@ -67,21 +71,21 @@ function App() {
   };
 
   const colors: Record<string, string> = {
-    effervescent: '#FFD700',      // bright gold
-    joyful: '#FFA500',            // warm orange
-    warm: '#FF6347',              // tomato red
-    golden: '#DAA520',            // goldenrod
-    tender: '#FFB6C1',            // light pink
-    soft: '#98D8C8',              // seafoam green
-    dreamy: '#DDA0DD',            // plum
-    quiet: '#6B9AC4',             // soft blue
-    nostalgic: '#CD5C5C',         // indian red
-    restless: '#5F9EA0',          // cadet blue
-    aching: '#C44569',            // deep rose red
-    heavy: '#696969',             // dim gray
-    melancholic: '#1E4D7B',       // cobalt blue
-    hollow: '#5A7D9A',            // steel blue
-    raw: '#8B0000',               // dark red
+    effervescent: '#FFFF00',      // pure bright yellow
+    joyful: '#FFD700',            // golden yellow
+    warm: '#FF8C00',              // dark orange
+    golden: '#FFA500',            // pure orange
+    tender: '#FF1493',            // deep pink
+    soft: '#FF69B4',              // hot pink
+    dreamy: '#DA70D6',            // orchid
+    quiet: '#BA55D3',             // medium orchid
+    nostalgic: '#9370DB',         // medium purple
+    restless: '#8A2BE2',          // blue violet
+    aching: '#4169E1',            // royal blue
+    heavy: '#1E90FF',             // dodger blue
+    melancholic: '#00BFFF',       // deep sky blue
+    hollow: '#00CED1',            // dark turquoise
+    raw: '#20B2AA',               // light sea green
   };
 
   const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);
@@ -91,8 +95,56 @@ function App() {
     console.log('First memory:', memories[0]);
   }
 
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (userName.trim()) {
+      setShowNameInput(false);
+      setShowYearInput(true);
+    }
+  };
+
+  const handleYearSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (userYear.trim()) {
+      setShowYearInput(false);
+    }
+  };
+
   return (
     <div className="app">
+      <h1 className="app-title">The Game of Yesteryear</h1>
+      <div className="user-info">
+        {showNameInput ? (
+          <form onSubmit={handleNameSubmit} className="user-form">
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="your name"
+              className="user-input"
+              autoFocus
+              maxLength={20}
+            />
+          </form>
+        ) : showYearInput ? (
+          <form onSubmit={handleYearSubmit} className="user-form">
+            <span className="user-display">{userName}'s </span>
+            <input
+              type="text"
+              value={userYear}
+              onChange={(e) => setUserYear(e.target.value)}
+              placeholder="year"
+              className="user-input"
+              autoFocus
+              maxLength={4}
+            />
+          </form>
+        ) : (
+          <div className="user-display" onClick={() => setShowNameInput(true)}>
+            {userName}'s {userYear}
+          </div>
+        )}
+      </div>
       <MemoryCanvas
         currentMood={currentMood}
         onSeed={handleSeed}
@@ -105,48 +157,46 @@ function App() {
         onJournalSubmit={handleJournalSubmit}
         onJournalSkip={handleJournalSkip}
       />
-      <div className="vault-container">
-        <button
-          className="archive-toggle"
-          onClick={() => {
-            console.log('Vault clicked, current showArchive:', showArchive, 'memories:', memories.length);
-            setShowArchive(prev => !prev);
-          }}
-        >
-          vault
-        </button>
-        {showArchive && (
-          <div className="vault-list">
-            {sortedMemories.length === 0 ? (
-              <div className="vault-item">
-                <div className="vault-mood" style={{ color: '#ddd' }}>
-                  no memories yet
-                </div>
+      <button
+        className="archive-toggle"
+        onClick={() => {
+          console.log('Vault clicked, current showArchive:', showArchive, 'memories:', memories.length);
+          setShowArchive(prev => !prev);
+        }}
+      >
+        vault
+      </button>
+      {showArchive && (
+        <div className="vault-list">
+          {sortedMemories.length === 0 ? (
+            <div className="vault-item">
+              <div className="vault-mood" style={{ color: '#ddd' }}>
+                no memories yet
               </div>
-            ) : (
-              sortedMemories.map((memory) => {
-                console.log('Rendering memory:', memory.mood, 'has note:', !!memory.note, 'note:', memory.note);
-                return (
-                  <div key={memory.id} className="vault-item">
-                    <div>
-                      <span
-                        className="vault-mood"
-                        style={{ color: colors[memory.mood] || '#bbb' }}
-                      >
-                        {memory.mood}
-                      </span>
-                      {memory.note && (
-                        <span className="vault-note">"{memory.note}"</span>
-                      )}
-                    </div>
-                    <div className="vault-date">{formatDate(memory.timestamp)}</div>
+            </div>
+          ) : (
+            sortedMemories.map((memory) => {
+              console.log('Rendering memory:', memory.mood, 'has note:', !!memory.note, 'note:', memory.note);
+              return (
+                <div key={memory.id} className="vault-item">
+                  <div>
+                    <span
+                      className="vault-mood"
+                      style={{ color: colors[memory.mood] || '#bbb' }}
+                    >
+                      {memory.mood}
+                    </span>
+                    {memory.note && (
+                      <span className="vault-note">"{memory.note}"</span>
+                    )}
                   </div>
-                );
-              })
-            )}
-          </div>
-        )}
-      </div>
+                  <div className="vault-date">{formatDate(memory.timestamp)}</div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -10,23 +10,23 @@ interface MemoryArchiveProps {
 const MemoryArchive = ({ memories, onClose }: MemoryArchiveProps) => {
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
 
-  // Deep, rich retro colors - matching CellularGrid
+  // Vibrant color spectrum: warm/happy → cool/sad
   const colors: Record<string, string> = {
-    effervescent: '#FFD700',      // bright gold
-    joyful: '#FFA500',            // warm orange
-    warm: '#DC143C',              // crimson red
-    golden: '#DAA520',            // goldenrod
-    tender: '#D63384',            // deep pink
-    soft: '#3CB371',              // medium sea green
-    dreamy: '#9932CC',            // dark orchid
-    quiet: '#4682B4',             // steel blue
-    nostalgic: '#CD5C5C',         // indian red
-    restless: '#5F9EA0',          // cadet blue
-    aching: '#C44569',            // deep rose red
-    heavy: '#696969',             // dim gray
-    melancholic: '#0047AB',       // cobalt blue
-    hollow: '#4169E1',            // royal blue
-    raw: '#8B0000',               // dark red
+    effervescent: '#FFFF00',      // pure bright yellow
+    joyful: '#FFD700',            // golden yellow
+    warm: '#FF8C00',              // dark orange
+    golden: '#FFA500',            // pure orange
+    tender: '#FF1493',            // deep pink
+    soft: '#FF69B4',              // hot pink
+    dreamy: '#DA70D6',            // orchid
+    quiet: '#BA55D3',             // medium orchid
+    nostalgic: '#9370DB',         // medium purple
+    restless: '#8A2BE2',          // blue violet
+    aching: '#4169E1',            // royal blue
+    heavy: '#1E90FF',             // dodger blue
+    melancholic: '#00BFFF',       // deep sky blue
+    hollow: '#00CED1',            // dark turquoise
+    raw: '#20B2AA',               // light sea green
   };
 
   const formatDate = (timestamp: number) => {
