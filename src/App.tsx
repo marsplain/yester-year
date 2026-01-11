@@ -22,8 +22,8 @@ function App() {
   const handleJournalSubmit = (note: string) => {
     if (selectedMood) {
       setCurrentMood(selectedMood);
-      // Store note with mood for later fossilization
-      sessionStorage.setItem('current-note', note);
+      // Store note with mood key for later fossilization
+      sessionStorage.setItem(`note-${selectedMood}`, note);
       setSelectedMood(null);
     }
   };
@@ -41,8 +41,8 @@ function App() {
   };
 
   const handleFossilize = (grid: string[][], mood: string) => {
-    const note = sessionStorage.getItem('current-note') || undefined;
-    sessionStorage.removeItem('current-note');
+    const note = sessionStorage.getItem(`note-${mood}`) || undefined;
+    sessionStorage.removeItem(`note-${mood}`);
     addGhostLayer(grid, mood, note);
   };
 
@@ -60,7 +60,17 @@ function App() {
     fleeting: '#E6E6FA',
     golden: '#DAA520',
     serene: '#87CEEB',
+    wistful: '#B0C4DE',
+    ethereal: '#F0E68C',
+    gentle: '#98FB98',
+    radiant: '#FFA07A',
+    quiet: '#D3D3D3',
+    vivid: '#FF6347',
+    soft: '#FFDAB9',
+    dreamy: '#DDA0DD',
+    warm: '#FF7F50',
     melancholy: '#9370DB',
+    peaceful: '#AFEEEE',
     nostalgic: '#CD5C5C',
     whimsical: '#FF1493',
     hushed: '#696969',
@@ -73,6 +83,11 @@ function App() {
   };
 
   const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);
+
+  console.log('App render - showArchive:', showArchive, 'memories count:', memories.length);
+  if (memories.length > 0) {
+    console.log('First memory:', memories[0]);
+  }
 
   return (
     <div className="app">
@@ -89,28 +104,44 @@ function App() {
         onJournalSkip={handleJournalSkip}
       />
       <div className="vault-container">
-        <button className="archive-toggle" onClick={() => {
-          console.log('Vault clicked, memories:', memories.length);
-          setShowArchive(!showArchive);
-        }}>
+        <button
+          className="archive-toggle"
+          onClick={() => {
+            console.log('Vault clicked, current showArchive:', showArchive, 'memories:', memories.length);
+            setShowArchive(prev => !prev);
+          }}
+        >
           vault
         </button>
-        {showArchive && sortedMemories.length > 0 && (
+        {showArchive && (
           <div className="vault-list">
-            {sortedMemories.map((memory) => (
-              <div key={memory.id} className="vault-item">
-                <div
-                  className="vault-mood"
-                  style={{ color: colors[memory.mood] || '#bbb' }}
-                >
-                  {memory.mood}
+            {sortedMemories.length === 0 ? (
+              <div className="vault-item">
+                <div className="vault-mood" style={{ color: '#ddd' }}>
+                  no memories yet
                 </div>
-                <div className="vault-date">{formatDate(memory.timestamp)}</div>
-                {memory.note && (
-                  <div className="vault-note">"{memory.note}"</div>
-                )}
               </div>
-            ))}
+            ) : (
+              sortedMemories.map((memory) => {
+                console.log('Rendering memory:', memory.mood, 'has note:', !!memory.note, 'note:', memory.note);
+                return (
+                  <div key={memory.id} className="vault-item">
+                    <div>
+                      <span
+                        className="vault-mood"
+                        style={{ color: colors[memory.mood] || '#bbb' }}
+                      >
+                        {memory.mood}
+                      </span>
+                      {memory.note && (
+                        <span className="vault-note">"{memory.note}"</span>
+                      )}
+                    </div>
+                    <div className="vault-date">{formatDate(memory.timestamp)}</div>
+                  </div>
+                );
+              })
+            )}
           </div>
         )}
       </div>
