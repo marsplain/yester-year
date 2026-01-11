@@ -1,0 +1,35 @@
+.character {
+  position: absolute;
+  animation: gentle-sway 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  z-index: 10;
+}
+
+.character-svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes gentle-sway {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(0.5deg);
+  }
+}
+
+/* Slight variation for each character */
+.character:nth-child(2n) {
+  animation-duration: 5s;
+  animation-delay: 0.5s;
+}
+
+.character:nth-child(3n) {
+  animation-duration: 4.5s;
+  animation-delay: 1s;
+}
+
+.character:nth-child(4n) {
+  animation-duration: 5.5s;
+  animation-delay: 1.5s;
+}

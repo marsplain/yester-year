@@ -1,0 +1,34 @@
+.memory-controls {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 100;
+}
+
+.word-button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 300;
+  color: #bbb;
+  text-align: right;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+.word-button:hover {
+  color: #666;
+  letter-spacing: 0.5px;
+}
+
+.word-button.selected {
+  color: #333;
+  font-weight: 400;
+}

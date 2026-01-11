@@ -1,0 +1,23 @@
+.app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fefefe;
+}
+
+.loading p {
+  font-size: 14px;
+  color: #ccc;
+  font-weight: 300;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+}
