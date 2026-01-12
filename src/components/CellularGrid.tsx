@@ -24,6 +24,8 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
   const [birthTime, setBirthTime] = useState<number | null>(null);
   const [hoveredMood, setHoveredMood] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const [immortalCell, setImmortalCell] = useState<{ x: number; y: number; mood: string } | null>(null);
+  const [composition, setComposition] = useState<Record<string, number>>({});
 
   // Vibrant color spectrum: warm/happy → cool/sad
   const colors: Record<string, string> = {
@@ -60,18 +62,28 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
       const centerX = Math.floor(COLS / 2);
       const centerY = Math.floor(ROWS / 2);
 
-      // Create initial pattern
-      for (let i = -2; i <= 2; i++) {
-        for (let j = -2; j <= 2; j++) {
+      // Create larger initial pattern for longer-lasting evolution
+      const aliveCells: { x: number; y: number }[] = [];
+      for (let i = -5; i <= 5; i++) {
+        for (let j = -5; j <= 5; j++) {
           const x = centerX + i;
           const y = centerY + j;
           if (x >= 0 && x < COLS && y >= 0 && y < ROWS) {
-            if (Math.random() > 0.3) {
+            if (Math.random() > 0.4) {
               newGrid[y][x] = mood;
+              aliveCells.push({ x, y });
             }
           }
         }
       }
+
+      // Select one random cell to be immortal
+      if (aliveCells.length > 0) {
+        const randomIndex = Math.floor(Math.random() * aliveCells.length);
+        const immortal = aliveCells[randomIndex];
+        setImmortalCell({ x: immortal.x, y: immortal.y, mood });
+      }
+
       setGrid(newGrid);
       setCurrentMood(mood);
       setBirthTime(Date.now());
@@ -87,17 +99,16 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
     const fossilizeTimer = setTimeout(() => {
       // Capture current grid state at the time of timeout
       setGrid(currentGrid => {
-        const hasLivingCells = currentGrid.some(row => row.some(cell => cell !== ''));
-        if (hasLivingCells) {
-          const snapshot = currentGrid.map(row => [...row]);
-          onFossilize(snapshot, currentMood);
-        }
+        // Always fossilize, even if pattern died out (immortal cell guarantees at least one cell)
+        const snapshot = currentGrid.map(row => [...row]);
+        onFossilize(snapshot, currentMood);
         return currentGrid;
       });
 
-      // Reset tracking
+      // Reset tracking and clear immortal cell
       setCurrentMood(null);
       setBirthTime(null);
+      setImmortalCell(null);
     }, 30000); // 30 seconds
 
     return () => clearTimeout(fossilizeTimer);
@@ -111,10 +122,19 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
 
         for (let y = 0; y < ROWS; y++) {
           for (let x = 0; x < COLS; x++) {
+            // Check if this is the immortal cell - if so, skip evolution rules
+            if (immortalCell && x === immortalCell.x && y === immortalCell.y) {
+              // Immortal cell always stays alive with its original mood
+              newGrid[y][x] = immortalCell.mood;
+              continue;
+            }
+
             const neighbors = countNeighbors(prevGrid, x, y);
             const cell = prevGrid[y][x];
 
-            // Conway's Game of Life rules with color propagation
+            // HighLife rules: more stable and creates beautiful patterns
+            // Survival: 2 or 3 neighbors (same as Conway)
+            // Birth: 3 or 6 neighbors (extended from Conway's 3)
             if (cell) {
               // Cell is alive
               if (neighbors < 2 || neighbors > 3) {
@@ -122,7 +142,7 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
               }
             } else {
               // Cell is dead
-              if (neighbors === 3) {
+              if (neighbors === 3 || neighbors === 6) {
                 // Birth - inherit color from neighbors
                 newGrid[y][x] = getNeighborColor(prevGrid, x, y);
               }
@@ -135,7 +155,7 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
     }, 200);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [immortalCell]);
 
   const countNeighbors = (grid: string[][], x: number, y: number): number => {
     let count = 0;
@@ -178,6 +198,43 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
     // Clear canvas
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate composition from all layers (ghost + current)
+    const moodCounts: Record<string, number> = {};
+    let totalCells = 0;
+
+    // Count ghost layer cells
+    ghostLayers.forEach(layer => {
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          const cell = layer.grid[y]?.[x];
+          if (cell) {
+            moodCounts[cell] = (moodCounts[cell] || 0) + 1;
+            totalCells++;
+          }
+        }
+      }
+    });
+
+    // Count current living cells
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        const cell = grid[y][x];
+        if (cell) {
+          moodCounts[cell] = (moodCounts[cell] || 0) + 1;
+          totalCells++;
+        }
+      }
+    }
+
+    // Calculate percentages
+    const newComposition: Record<string, number> = {};
+    if (totalCells > 0) {
+      Object.keys(moodCounts).forEach(mood => {
+        newComposition[mood] = (moodCounts[mood] / totalCells) * 100;
+      });
+    }
+    setComposition(newComposition);
 
     // Draw ghost layers first (oldest to newest)
     ghostLayers.forEach(layer => {
@@ -243,6 +300,11 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
     setTooltipPos(null);
   };
 
+  // Sort composition by percentage descending
+  const sortedComposition = Object.entries(composition)
+    .sort(([, a], [, b]) => b - a)
+    .filter(([, percentage]) => percentage > 0);
+
   return (
     <div className="cellular-grid">
       <canvas
@@ -262,6 +324,21 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
           }}
         >
           {hoveredMood}
+        </div>
+      )}
+      {sortedComposition.length > 0 && (
+        <div className="composition-bar">
+          {sortedComposition.map(([mood, percentage]) => (
+            <div
+              key={mood}
+              className="composition-segment"
+              style={{
+                width: `${percentage}%`,
+                backgroundColor: colors[mood] || '#FFFFFF',
+              }}
+              title={`${mood}: ${percentage.toFixed(1)}%`}
+            />
+          ))}
         </div>
       )}
     </div>

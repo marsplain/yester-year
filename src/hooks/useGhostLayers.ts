@@ -137,6 +137,36 @@ export const useGhostLayers = () => {
     });
   }, []);
 
+  const updateGhostLayer = useCallback((grid: string[][], mood: string) => {
+    setGhostLayers(prev => {
+      const layerIndex = prev.findIndex(layer => layer.mood === mood && !layer.grid.some(row => row.some(cell => cell !== '')));
+      if (layerIndex !== -1) {
+        const updated = [...prev];
+        updated[layerIndex] = {
+          ...updated[layerIndex],
+          grid: grid.map(row => [...row]),
+        };
+        console.log('Updated ghost layer grid for:', mood);
+        return updated;
+      }
+      return prev;
+    });
+
+    setMemories(prev => {
+      const memoryIndex = prev.findIndex(memory => memory.mood === mood && memory.gridSnapshot && !memory.gridSnapshot.some(row => row.some(cell => cell !== '')));
+      if (memoryIndex !== -1) {
+        const updated = [...prev];
+        updated[memoryIndex] = {
+          ...updated[memoryIndex],
+          gridSnapshot: grid.map(row => [...row]),
+        };
+        console.log('Updated memory grid for:', mood);
+        return updated;
+      }
+      return prev;
+    });
+  }, []);
+
   const clearAllLayers = useCallback(() => {
     setGhostLayers([]);
     setMemories([]);
@@ -148,6 +178,7 @@ export const useGhostLayers = () => {
     ghostLayers,
     memories,
     addGhostLayer,
+    updateGhostLayer,
     clearAllLayers,
   };
 };

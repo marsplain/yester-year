@@ -12,7 +12,7 @@ function App() {
   const [userYear, setUserYear] = useState('');
   const [showNameInput, setShowNameInput] = useState(true);
   const [showYearInput, setShowYearInput] = useState(false);
-  const { ghostLayers, memories, addGhostLayer } = useGhostLayers();
+  const { ghostLayers, memories, addGhostLayer, updateGhostLayer } = useGhostLayers();
 
   const handleWordClick = (selection: {
     mood: string;
@@ -54,12 +54,12 @@ function App() {
     setCurrentMood(null);
   };
 
-  const handleFossilize = (_grid: string[][], mood: string) => {
-    // Memory was already created when journal was submitted
-    // Just clean up sessionStorage
+  const handleFossilize = (grid: string[][], mood: string) => {
+    // Update the ghost layer and memory with the evolved grid
+    updateGhostLayer(grid, mood);
+    // Clean up sessionStorage
     sessionStorage.removeItem(`note-${mood}`);
     sessionStorage.removeItem(`memory-id-${mood}`);
-    // Note: The grid snapshot is already saved, this fossilization just cleans up
   };
 
   const formatDate = (timestamp: number) => {
