@@ -109,6 +109,9 @@ function App() {
 
   return (
     <div className="app">
+      <div className="mobile-message">
+        <p>this experience is best viewed on desktop. please visit on a larger screen.</p>
+      </div>
       <h1 className="app-title">The Game of Yesteryear</h1>
       <button
         className="about-toggle"

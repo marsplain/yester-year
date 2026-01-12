@@ -293,3 +293,41 @@
 .creator-credit a:hover {
   color: #666;
 }
+
+.mobile-message {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .app-title,
+  .about-toggle,
+  .about-tooltip,
+  .user-info,
+  .memory-canvas,
+  .archive-toggle,
+  .vault-list,
+  .creator-credit {
+    display: none !important;
+  }
+
+  .mobile-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: #1a1a1a;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .mobile-message p {
+    font-size: 14px;
+    font-weight: 300;
+    color: #bbb;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
+    text-transform: lowercase;
+    max-width: 300px;
+  }
+}
