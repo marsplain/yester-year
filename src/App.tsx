@@ -71,21 +71,17 @@ function App() {
   };
 
   const colors: Record<string, string> = {
-    effervescent: '#FFFF00',      // pure bright yellow
-    joyful: '#FFD700',            // golden yellow
-    warm: '#FF8C00',              // dark orange
-    golden: '#FFA500',            // pure orange
-    tender: '#FF1493',            // deep pink
-    soft: '#FF69B4',              // hot pink
-    dreamy: '#DA70D6',            // orchid
-    quiet: '#BA55D3',             // medium orchid
-    nostalgic: '#9370DB',         // medium purple
+    joyful: '#FFFF00',            // bright yellow
+    warm: '#FF8C00',              // bright orange
+    soft: '#FF1493',              // hot pink
+    dreamy: '#9370DB',            // medium purple
+    quiet: '#8B4513',             // saddle brown
+    nostalgic: '#D2691E',         // chocolate brown
     restless: '#8A2BE2',          // blue violet
-    aching: '#4169E1',            // royal blue
-    heavy: '#1E90FF',             // dodger blue
-    melancholic: '#00BFFF',       // deep sky blue
-    hollow: '#00CED1',            // dark turquoise
-    raw: '#20B2AA',               // light sea green
+    heavy: '#0047AB',             // cobalt blue
+    melancholic: '#00BFFF',       // bright sky blue
+    hollow: '#00FF00',            // bright green
+    painful: '#FF0000',           // bright red
   };
 
   const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);

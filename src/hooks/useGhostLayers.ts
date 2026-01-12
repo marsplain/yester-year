@@ -10,12 +10,18 @@ export const useGhostLayers = () => {
 
   // Load from localStorage on mount
   useEffect(() => {
+    console.log('Loading from localStorage...');
     const storedLayers = localStorage.getItem(GHOST_LAYERS_KEY);
     const storedMemories = localStorage.getItem(MEMORIES_KEY);
 
+    console.log('Stored layers:', storedLayers ? JSON.parse(storedLayers).length : 0);
+    console.log('Stored memories:', storedMemories ? JSON.parse(storedMemories).length : 0);
+
     if (storedLayers) {
       try {
-        setGhostLayers(JSON.parse(storedLayers));
+        const parsed = JSON.parse(storedLayers);
+        console.log('Loaded ghost layers:', parsed.length);
+        setGhostLayers(parsed);
       } catch (e) {
         console.error('Failed to parse ghost layers:', e);
       }
@@ -23,7 +29,9 @@ export const useGhostLayers = () => {
 
     if (storedMemories) {
       try {
-        setMemories(JSON.parse(storedMemories));
+        const parsed = JSON.parse(storedMemories);
+        console.log('Loaded memories:', parsed.length);
+        setMemories(parsed);
       } catch (e) {
         console.error('Failed to parse memories:', e);
       }
@@ -32,11 +40,13 @@ export const useGhostLayers = () => {
 
   // Save to localStorage whenever ghost layers change
   useEffect(() => {
+    console.log('Saving ghost layers to localStorage:', ghostLayers.length);
     localStorage.setItem(GHOST_LAYERS_KEY, JSON.stringify(ghostLayers));
   }, [ghostLayers]);
 
   // Save to localStorage whenever memories change
   useEffect(() => {
+    console.log('Saving memories to localStorage:', memories.length);
     localStorage.setItem(MEMORIES_KEY, JSON.stringify(memories));
   }, [memories]);
 

@@ -18,21 +18,17 @@ const MemoryControls = ({ onCreateMemory, selectedMood, onJournalSubmit, onJourn
   const [selectedWord, setSelectedWord] = useState('');
 
   const words = [
-    'effervescent',
     'joyful',
     'warm',
-    'golden',
-    'tender',
     'soft',
     'dreamy',
     'quiet',
     'nostalgic',
     'restless',
-    'aching',
     'heavy',
     'melancholic',
     'hollow',
-    'raw',
+    'painful',
   ];
 
   const handleWordClick = (word: string) => {
