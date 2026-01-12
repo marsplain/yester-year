@@ -5,7 +5,6 @@ import { useGhostLayers } from './hooks/useGhostLayers';
 import './App.css';
 
 function App() {
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [currentMood, setCurrentMood] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
   const [userName, setUserName] = useState('');
@@ -21,33 +20,12 @@ function App() {
     weather: string;
     activity: string;
   }) => {
-    setSelectedMood(selection.mood);
-  };
+    // Create memory immediately with empty grid (will be updated later)
+    const emptyGrid: string[][] = Array(50).fill(null).map(() => Array(50).fill(''));
+    addGhostLayer(emptyGrid, selection.mood, undefined);
 
-  const handleJournalSubmit = (note: string) => {
-    if (selectedMood) {
-      // Create memory immediately with empty grid (will be updated later)
-      const emptyGrid: string[][] = Array(50).fill(null).map(() => Array(50).fill(''));
-      addGhostLayer(emptyGrid, selectedMood, note);
-
-      setCurrentMood(selectedMood);
-      // Store note with mood key for later grid update
-      sessionStorage.setItem(`note-${selectedMood}`, note);
-      sessionStorage.setItem(`memory-id-${selectedMood}`, Date.now().toString());
-      setSelectedMood(null);
-    }
-  };
-
-  const handleJournalSkip = () => {
-    if (selectedMood) {
-      // Create memory immediately without note
-      const emptyGrid: string[][] = Array(50).fill(null).map(() => Array(50).fill(''));
-      addGhostLayer(emptyGrid, selectedMood, undefined);
-
-      setCurrentMood(selectedMood);
-      sessionStorage.setItem(`memory-id-${selectedMood}`, Date.now().toString());
-      setSelectedMood(null);
-    }
+    setCurrentMood(selection.mood);
+    sessionStorage.setItem(`memory-id-${selection.mood}`, Date.now().toString());
   };
 
   const handleSeed = () => {
@@ -72,17 +50,16 @@ function App() {
   };
 
   const colors: Record<string, string> = {
-    joyful: '#FFFF00',            // bright yellow
-    warm: '#FF8C00',              // bright orange
-    soft: '#FF1493',              // hot pink
-    dreamy: '#9370DB',            // medium purple
-    quiet: '#8B4513',             // saddle brown
-    nostalgic: '#D2691E',         // chocolate brown
-    restless: '#8A2BE2',          // blue violet
-    heavy: '#0047AB',             // cobalt blue
-    melancholic: '#00BFFF',       // bright sky blue
-    hollow: '#00FF00',            // bright green
-    painful: '#FF0000',           // bright red
+    '1': '#0047AB',   // dark blue (coldest)
+    '2': '#0099FF',   // bright blue
+    '3': '#00CCCC',   // cyan
+    '4': '#00FF00',   // green
+    '5': '#99FF00',   // yellow-green
+    '6': '#FFFF00',   // yellow
+    '7': '#FF8C00',   // orange
+    '8': '#FF1493',   // hot pink
+    '9': '#FF0000',   // red
+    '10': '#FF0066',  // magenta (warmest)
   };
 
   const sortedMemories = [...memories].sort((a, b) => b.timestamp - a.timestamp);
@@ -113,27 +90,25 @@ function App() {
         <p>this experience is best viewed on desktop. please visit on a larger screen.</p>
       </div>
       <h1 className="app-title">The Game of Yesteryear</h1>
-      <button
-        className="about-toggle"
+      <div
+        className="about-container"
         onMouseEnter={() => setShowAbout(true)}
         onMouseLeave={() => setShowAbout(false)}
       >
-        about
-      </button>
-      {showAbout && (
-        <div
-          className="about-tooltip"
-          onMouseEnter={() => setShowAbout(true)}
-          onMouseLeave={() => setShowAbout(false)}
-        >
-          <p>This is inspired by John Conway's 1970s mathematical cellular automaton called <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">Game of Life</a>.</p>
-          <p>The system is built on a few basic rules: A cell survives if it has two or three neighbors. A new cell appears when there are exactly three. Each configuration reaches a final form after thirty seconds of growth.</p>
-          <p>From these simple rules, complex patterns emerge over time. This game became famous because it showed that meaningful patterns can emerge without intention.</p>
-          <p>I've turned this game into a sort of vault of memories. Each day, record how you're feeling and let it evolve on the page. Some emotions grow outward and become intricate patterns. Others fade quickly, leaving behind soft traces.</p>
-          <p>Over time, these cells accumulate into a visual record of the year. Maybe some order will emerge. Or at least something worth looking at for a brief moment.</p>
-          <p>I like to use this space to pause and watch the cells live, grow, and die.</p>
-        </div>
-      )}
+        <button className="about-toggle">
+          about
+        </button>
+        {showAbout && (
+          <div className="about-tooltip">
+            <p>This piece is inspired by John Conway's 1970s mathematical cellular automaton, <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">Game of Life</a>.</p>
+            <p>The system follows a few simple rules: a cell survives with two or three neighbors, and a new cell appears when there are exactly three. Each configuration grows for thirty seconds before settling into its final form.</p>
+            <p>From these constraints, complex patterns can emerge over time. The game became famous for showing how meaning can arise without intention or control.</p>
+            <p>This page is a vault of your days. Rate each one from 1–10, with each number mapped to a color. Some days expand into intricate patterns. Others fade quickly, leaving only traces.</p>
+            <p>Over time, these cells accumulate into a visual record of our year. I hope we learn from our <span style={{ color: '#0047AB' }}>blues</span> and enjoy our <span style={{ color: '#CCCC00' }}>yellows</span>. Maybe some order will emerge.</p>
+            <p>I enjoy taking a moment to watch the cells live, grow, and die.</p>
+          </div>
+        )}
+      </div>
       <div className="user-info">
         {showNameInput ? (
           <form onSubmit={handleNameSubmit} className="user-form">
@@ -174,9 +149,6 @@ function App() {
       />
       <MemoryControls
         onCreateMemory={handleWordClick}
-        selectedMood={selectedMood}
-        onJournalSubmit={handleJournalSubmit}
-        onJournalSkip={handleJournalSkip}
       />
       <button
         className="archive-toggle"
@@ -197,20 +169,14 @@ function App() {
             </div>
           ) : (
             sortedMemories.map((memory) => {
-              console.log('Rendering memory:', memory.mood, 'has note:', !!memory.note, 'note:', memory.note);
               return (
                 <div key={memory.id} className="vault-item">
-                  <div>
-                    <span
-                      className="vault-mood"
-                      style={{ color: colors[memory.mood] || '#bbb' }}
-                    >
-                      {memory.mood}
-                    </span>
-                    {memory.note && (
-                      <span className="vault-note">"{memory.note}"</span>
-                    )}
-                  </div>
+                  <span
+                    className="vault-mood"
+                    style={{ color: colors[memory.mood] || '#888' }}
+                  >
+                    {memory.mood}
+                  </span>
                   <div className="vault-date">{formatDate(memory.timestamp)}</div>
                 </div>
               );

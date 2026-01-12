@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import JournalPrompt from './JournalPrompt';
 import './MemoryControls.css';
 
 interface MemoryControlsProps {
@@ -9,59 +8,37 @@ interface MemoryControlsProps {
     weather: string;
     activity: string;
   }) => void;
-  selectedMood: string | null;
-  onJournalSubmit: (note: string) => void;
-  onJournalSkip: () => void;
 }
 
-const MemoryControls = ({ onCreateMemory, selectedMood, onJournalSubmit, onJournalSkip }: MemoryControlsProps) => {
-  const [selectedWord, setSelectedWord] = useState('');
+const MemoryControls = ({ onCreateMemory }: MemoryControlsProps) => {
+  const [selectedNumber, setSelectedNumber] = useState('');
 
-  const words = [
-    'joyful',
-    'warm',
-    'soft',
-    'dreamy',
-    'quiet',
-    'nostalgic',
-    'restless',
-    'heavy',
-    'melancholic',
-    'hollow',
-    'painful',
-  ];
+  const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-  const handleWordClick = (word: string) => {
-    setSelectedWord(word);
-    // Trigger mood selection (will show journal prompt)
+  const handleNumberClick = (number: string) => {
+    setSelectedNumber(number);
+    // Trigger mood selection immediately (no journal prompt)
     onCreateMemory({
-      mood: word,
+      mood: number,
       season: 'spring',
       weather: 'sunny',
       activity: 'rest',
     });
     // Brief delay before clearing visual selection
-    setTimeout(() => setSelectedWord(''), 300);
+    setTimeout(() => setSelectedNumber(''), 300);
   };
 
   return (
     <div className="memory-controls">
-      {words.map((word) => (
-        <div key={word}>
-          <button
-            className={`word-button ${selectedWord === word ? 'selected' : ''}`}
-            onClick={() => handleWordClick(word)}
-          >
-            {word}
-          </button>
-          {selectedMood === word && (
-            <JournalPrompt
-              mood={selectedMood}
-              onSubmit={onJournalSubmit}
-              onSkip={onJournalSkip}
-            />
-          )}
-        </div>
+      <div className="question">how was your day?</div>
+      {numbers.map((number) => (
+        <button
+          key={number}
+          className={`word-button ${selectedNumber === number ? 'selected' : ''}`}
+          onClick={() => handleNumberClick(number)}
+        >
+          {number}
+        </button>
       ))}
     </div>
   );

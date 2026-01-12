@@ -9,12 +9,22 @@
   z-index: 100;
 }
 
+.question {
+  font-size: 13px;
+  font-weight: 300;
+  color: #888;
+  text-align: right;
+  padding: 4px 0 12px 0;
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+}
+
 .word-button {
   background: none;
   border: none;
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   text-align: right;
   padding: 4px 0;
   cursor: pointer;

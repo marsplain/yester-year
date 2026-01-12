@@ -12,27 +12,31 @@
   left: calc(50% - 480px);
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   letter-spacing: 0.3px;
   margin: 0;
   z-index: 100;
 }
 
-.about-toggle {
+.about-container {
   position: fixed;
   top: 40px;
   left: calc(50% - 480px - 238px);
+  z-index: 100;
+  padding-right: 460px;
+}
+
+.about-toggle {
   background: none;
   border: none;
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: lowercase;
   letter-spacing: 0.3px;
-  padding: 4px 0;
-  z-index: 100;
+  padding: 4px 8px 4px 0;
 }
 
 .about-toggle:hover {
@@ -41,20 +45,19 @@
 }
 
 .about-tooltip {
-  position: fixed;
-  top: 40px;
-  left: calc(50% - 480px - 238px + 60px);
+  position: absolute;
+  top: 0;
+  left: 50px;
   width: 400px;
-  height: 600px;
+  max-height: 600px;
   overflow-y: auto;
   background: rgba(26, 26, 26, 0.95);
   padding: 20px;
   font-size: 12px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   line-height: 1.6;
   letter-spacing: 0.3px;
-  z-index: 101;
   animation: fadeIn 0.3s ease-out;
   scrollbar-width: thin;
   scrollbar-color: #666 transparent;
@@ -83,7 +86,7 @@
 }
 
 .about-tooltip a {
-  color: #bbb;
+  color: #888;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
@@ -98,7 +101,7 @@
   right: calc(50% - 480px);
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   letter-spacing: 0.3px;
   z-index: 100;
 }
@@ -116,7 +119,7 @@
   padding: 2px 0;
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   outline: none;
   letter-spacing: 0.3px;
   width: auto;
@@ -129,7 +132,7 @@
 }
 
 .user-input:focus {
-  border-bottom-color: #bbb;
+  border-bottom-color: #888;
 }
 
 .user-display {
@@ -166,7 +169,7 @@
   border: none;
   font-size: 13px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: lowercase;
@@ -212,7 +215,7 @@
 }
 
 .vault-list::-webkit-scrollbar-thumb:hover {
-  background: #bbb;
+  background: #888;
 }
 
 .vault-item {
@@ -278,14 +281,14 @@
   left: calc(50% - 480px);
   font-size: 11px;
   font-weight: 300;
-  color: #bbb;
+  color: #888;
   letter-spacing: 0.3px;
   text-transform: lowercase;
   z-index: 100;
 }
 
 .creator-credit a {
-  color: #bbb;
+  color: #888;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -324,7 +327,7 @@
   .mobile-message p {
     font-size: 14px;
     font-weight: 300;
-    color: #bbb;
+    color: #888;
     letter-spacing: 0.3px;
     line-height: 1.6;
     text-transform: lowercase;

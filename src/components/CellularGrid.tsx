@@ -27,19 +27,18 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
   const [immortalCell, setImmortalCell] = useState<{ x: number; y: number; mood: string } | null>(null);
   const [composition, setComposition] = useState<Record<string, number>>({});
 
-  // Vibrant color spectrum: warm/happy → cool/sad
+  // Vibrant color spectrum: 1 (coldest) → 10 (warmest)
   const colors: Record<string, string> = {
-    joyful: '#FFFF00',            // bright yellow
-    warm: '#FF8C00',              // bright orange
-    soft: '#FF1493',              // hot pink
-    dreamy: '#9370DB',            // medium purple
-    quiet: '#8B4513',             // saddle brown
-    nostalgic: '#D2691E',         // chocolate brown
-    restless: '#8A2BE2',          // blue violet
-    heavy: '#0047AB',             // cobalt blue
-    melancholic: '#00BFFF',       // bright sky blue
-    hollow: '#00FF00',            // bright green
-    painful: '#FF0000',           // bright red
+    '1': '#0047AB',   // dark blue (coldest)
+    '2': '#0099FF',   // bright blue
+    '3': '#00CCCC',   // cyan
+    '4': '#00FF00',   // green
+    '5': '#99FF00',   // yellow-green
+    '6': '#FFFF00',   // yellow
+    '7': '#FF8C00',   // orange
+    '8': '#FF1493',   // hot pink
+    '9': '#FF0000',   // red
+    '10': '#FF0066',  // magenta (warmest)
   };
 
   // Seed the grid when mood changes
