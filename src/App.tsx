@@ -12,6 +12,7 @@ function App() {
   const [userYear, setUserYear] = useState('');
   const [showNameInput, setShowNameInput] = useState(true);
   const [showYearInput, setShowYearInput] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const { ghostLayers, memories, addGhostLayer, updateGhostLayer } = useGhostLayers();
 
   const handleWordClick = (selection: {
@@ -109,6 +110,27 @@ function App() {
   return (
     <div className="app">
       <h1 className="app-title">The Game of Yesteryear</h1>
+      <button
+        className="about-toggle"
+        onMouseEnter={() => setShowAbout(true)}
+        onMouseLeave={() => setShowAbout(false)}
+      >
+        about
+      </button>
+      {showAbout && (
+        <div
+          className="about-tooltip"
+          onMouseEnter={() => setShowAbout(true)}
+          onMouseLeave={() => setShowAbout(false)}
+        >
+          <p>This is inspired by John Conway's 1970s mathematical cellular automaton called <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">Game of Life</a>.</p>
+          <p>The system is built on a few basic rules: A cell survives if it has two or three neighbors. A new cell appears when there are exactly three. Each configuration reaches a final form after thirty seconds of growth.</p>
+          <p>From these simple rules, complex patterns emerge over time. This game became famous because it showed that meaningful patterns can emerge without intention.</p>
+          <p>I've turned this game into a sort of vault of memories. Each day, record how you're feeling and let it evolve on the page. Some emotions grow outward and become intricate patterns. Others fade quickly, leaving behind soft traces.</p>
+          <p>Over time, these cells accumulate into a visual record of the year. Maybe some order will emerge. Or at least something worth looking at for a brief moment.</p>
+          <p>I like to use this space to pause and watch the cells live, grow, and die.</p>
+        </div>
+      )}
       <div className="user-info">
         {showNameInput ? (
           <form onSubmit={handleNameSubmit} className="user-form">
