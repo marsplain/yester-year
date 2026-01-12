@@ -271,3 +271,25 @@
     opacity: 1;
   }
 }
+
+.creator-credit {
+  position: fixed;
+  bottom: 40px;
+  left: calc(50% - 480px);
+  font-size: 11px;
+  font-weight: 300;
+  color: #bbb;
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+  z-index: 100;
+}
+
+.creator-credit a {
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.creator-credit a:hover {
+  color: #666;
+}

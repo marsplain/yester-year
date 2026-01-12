@@ -215,6 +215,9 @@ function App() {
           )}
         </div>
       )}
+      <div className="creator-credit">
+        created by <a href="https://github.com/marsplain" target="_blank" rel="noopener noreferrer">marsplain</a>
+      </div>
     </div>
   );
 }
