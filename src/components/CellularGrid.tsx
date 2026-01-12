@@ -336,7 +336,7 @@ const CellularGrid = ({ mood, onSeed, ghostLayers, onFossilize }: CellularGridPr
                 width: `${percentage}%`,
                 backgroundColor: colors[mood] || '#FFFFFF',
               }}
-              title={`${mood}: ${percentage.toFixed(1)}%`}
+              data-mood={`${mood} (${percentage.toFixed(1)}%)`}
             />
           ))}
         </div>

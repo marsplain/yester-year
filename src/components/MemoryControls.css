@@ -1,6 +1,6 @@
 .memory-controls {
   position: fixed;
-  right: 40px;
+  right: calc(50% - 480px - 238px);
   top: 50%;
   transform: translateY(-50%);
   display: flex;

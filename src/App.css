@@ -85,7 +85,7 @@
 
 .archive-toggle {
   position: fixed;
-  left: 40px;
+  left: calc(50% - 480px - 238px);
   top: calc(50% - (15 * (13px + 8px)) / 2);
   background: none;
   border: none;
@@ -108,7 +108,7 @@
 
 .vault-list {
   position: fixed;
-  left: 40px;
+  left: calc(50% - 480px - 238px);
   top: calc(50% - (15 * (13px + 8px)) / 2 + 21px);
   display: flex;
   flex-direction: column;
