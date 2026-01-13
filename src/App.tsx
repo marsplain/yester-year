@@ -102,7 +102,7 @@ function App() {
         </button>
         {showAbout && (
           <div className="about-tooltip">
-            <p>This piece is inspired by John Conway's 1970s mathematical cellular automaton, <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">Game of Life</a>.</p>
+            <p>This is inspired by John Conway's 1970s mathematical cellular automaton, <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">Game of Life</a>.</p>
             <p>The system follows a few simple rules: a cell survives with two or three neighbors, and a new cell appears when there are exactly three. Each configuration grows for thirty seconds before settling into its final form.</p>
             <p>From these constraints, complex patterns can emerge over time. The game became famous for showing how meaning can arise without intention or control.</p>
             <p>This page is a vault of your days. Rate each one from 1–10, with each number mapped to a color. Some days expand into intricate patterns. Others fade quickly, leaving only traces.</p>
