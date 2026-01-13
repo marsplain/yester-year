@@ -7,9 +7,9 @@ import './App.css';
 function App() {
   const [currentMood, setCurrentMood] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [userYear, setUserYear] = useState('');
-  const [showNameInput, setShowNameInput] = useState(true);
+  const [userName, setUserName] = useState(() => localStorage.getItem('yester-year-username') || '');
+  const [userYear, setUserYear] = useState(() => localStorage.getItem('yester-year-useryear') || '');
+  const [showNameInput, setShowNameInput] = useState(() => !localStorage.getItem('yester-year-username'));
   const [showYearInput, setShowYearInput] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const { ghostLayers, memories, addGhostLayer, updateGhostLayer } = useGhostLayers();
@@ -72,6 +72,7 @@ function App() {
   const handleNameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (userName.trim()) {
+      localStorage.setItem('yester-year-username', userName);
       setShowNameInput(false);
       setShowYearInput(true);
     }
@@ -80,6 +81,7 @@ function App() {
   const handleYearSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (userYear.trim()) {
+      localStorage.setItem('yester-year-useryear', userYear);
       setShowYearInput(false);
     }
   };
